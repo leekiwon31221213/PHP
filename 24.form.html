@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>폼전송</title>
+  </head>
+  <body>
+    <form action="24.form(폼)다루기.php" name="form1" method="post" autocomplete="off">
+      글제목 : <input type="text" name="subject" />
+      <br />
+      암호 : <input type="password" name="password" />
+      <br />
+      글내용 <textarea name="content"></textarea>
+      <button class="btn" type="button">전송</button>
+    </form>
+
+    <script>
+      const Form_btn = document.querySelector('.btn');
+
+      Form_btn.addEventListener('click', function () {
+        const f = document.form1;
+        if (f.subject.value == '') {
+          alert('제목을 입력해주세요');
+          f.subject.focus();
+          return;
+        } else if (f.password.value == '') {
+          alert('암호를 입력해주세요');
+          f.password.focus();
+          return;
+        } else if (f.content.value == '') {
+          alert('내용을 입력해주세요');
+          f.content.focus();
+          return;
+        }
+
+        document.form1.submit();
+      });
+    </script>
+  </body>
+</html>
