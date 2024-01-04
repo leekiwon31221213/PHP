@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아이디 체크 실습 시작1</title>
+  </head>
+  <body>
+    <form action="">
+      <input type="text" name="user_id" class="user_id" placeholder="아이디를 입력해 주샘" />
+      <input type="button" value="중복확인" class="ajax_btn" />
+      <p><span class="msg">아이디는 대소문자 구분없이 12자 이내로 입력해주세요</span></p>
+    </form>
+
+    <!-- ajax -->
+    <script>
+      const btn = document.querySelector('.ajax_btn');
+      btn.addEventListener('click', function () {
+        const user_id = document.querySelector('.user_id');
+        const span_msg = document.querySelector('.msg');
+        /* DB XML 객체를 인스턴싱 */
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', './78.2아이디체크실습시작.php?id=' + user_id.value, true);
+
+        //요청 전송
+        xhr.send();
+
+        // 통신 후 작업
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            // console.log('통신성공');
+            //json.parse()는 JSON 문자열의 구문을 분석하고, 그 결과에서 JavaScript 값이나 객체를 생성
+            const obj = JSON.parse(xhr.response);
+            if (obj.result == 'exist') {
+              span_msg.textContent = '이미 사용중인 아이디 입니다.';
+              user_id.value = '';
+              user_id.focus();
+            } else {
+              span_msg.textContent = '사용이 가능한 아이디입니다.';
+            }
+            // console.log(xhr.response);
+          } else {
+            console.log(xhr.status);
+          }
+        };
+      });
+    </script>
+  </body>
+</html>

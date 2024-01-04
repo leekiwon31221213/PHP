@@ -12,6 +12,9 @@ $file = fopen($_FILES['csv']['tmp_name'],'r');
 $conn->beginTransaction();
 while(($line = fgetcsv($file))!== FALSE){
     // array_push($arr,$line);
+    //다국어 지원 한글 깨질때
+    $line[0] = iconv('euc-kr', 'utf-8',$line[0]);
+    $line[1] = iconv('euc-kr', 'utf-8',$line[1]);
 
     $sql = "INSERT INTO csvmember(csv_name,csv_email) VALUES('".$line[0]."','".$line[1]."');";
 
