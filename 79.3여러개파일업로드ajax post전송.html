@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>파일업로드ajax</title>
+  </head>
+
+  <style>
+    .dis {
+      margin-top: 30px;
+    }
+    .dis > img {
+      max-width: 100%;
+    }
+  </style>
+  <body>
+    <!-- ajax 방식으로 할 경우 action을 안넣어도됨-->
+    <form class="form1" action="" method="post" enctype="multipart/form-data">
+      <!-- 파일 업로드가 많을때 1번 방법 photo[] + multiple추가 -->
+      <input type="file" name="photo[]" multiple />
+      <!-- 파일 업로드가 많을때 2번 방법 photo[]
+      <input type="file" name="photo[]" />
+      <input type="file" name="photo[]" />
+      <input type="file" name="photo[]" />
+      <input type="file" name="photo[]" />
+      -->
+      <input type="button" value="확인" class="upload_btn" />
+    </form>
+
+    <div class="dis"></div>
+
+    <br />
+    <hr />
+
+    <h2>한개 업로드와 여러개 업로드 차이점 (multiple)이 있고 없고 차이점</h2>
+    <p>['photo']에 [name]하고 바로 값이 있었는데 그 밑에서 배열 형태로 변경됨</p>
+    <p>파일 하나만 올려도 배열 형태로 변경됨</p>
+    <p>여러개(multiple)을 사용하면 배열 대한 내용을 반복문으로 처리 해줘야함</p>
+    <p>is_array()배열인지 아닌지를 체크해주는 함수</p>
+
+    <p>for.. in 반복문은 "순서 없이" 반복이 되는 특징 <br /></p>
+
+    <script>
+      const upload_btn = document.querySelector('.upload_btn');
+      upload_btn.addEventListener('click', () => {
+        const form = document.querySelector('.form1');
+
+        /* formData 라는 객체가 있는데 인스턴스를 해줘야함 */
+        const formData = new FormData(form);
+
+        //통신
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '79.4여러개파일업로드ajax_post받음.php', true);
+        xhr.send(formData);
+        xhr.onload = () => {
+          //   console.log(xhr.status);
+          /* 통신이 성공했을때 */
+          if (xhr.status == 200) {
+            /* 79.4여러개파일업로드ajax_post에서 받은 부분을 처리  */
+            const data = JSON.parse(xhr.responseText);
+            const dis = document.querySelector('.dis');
+
+            if (data.result == 'success') {
+              if (data.img.indexOf('|') != -1) {
+                const imgs = data.img.split('|');
+                for (let img of imgs) {
+                  //   console.log(img);
+                  dis.innerHTML += '<img src="' + img + '">';
+                }
+              } else {
+                dis.innerHTML = '<img src="' + data.img + '">';
+              }
+            }
+          }
+        };
+
+        /* 200이면 정상 출력  404면 오류 */
+      });
+    </script>
+  </body>
+</html>

@@ -22,6 +22,9 @@
         </p>
 
         <p>idx는 게시판 번호라 생각하면됨 auto_increment 게시판이 증가하면 번호가 자동적으로 1씩 증가</p>
+
+        <p>alter table '테이블명' add column 필드명 타입 default ''; 필드 추가</p>
+        <p>alter table '테이블명' DROP column 필드명; 필드 삭제</p>
     </h2>
 
     <br>

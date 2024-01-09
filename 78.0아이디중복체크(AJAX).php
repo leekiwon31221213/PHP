@@ -23,6 +23,7 @@
             CREATE TABLE MEMBER(
             <br>idx INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
             <br>user_id VARCHAR(50) DEFAULT '' ,
+            <br>user_pw VARCHAR(30) DEFAULT '' ,
             <br>rdate DATETIME,
             <br>PRIMARY KEY (idx)
             <br> );

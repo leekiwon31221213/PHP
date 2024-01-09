@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>파일업로드ajax</title>
+  </head>
+
+  <style>
+    .dis {
+      margin-top: 30px;
+      width: 300px;
+    }
+    .dis > img {
+      max-width: 100%;
+    }
+  </style>
+  <body>
+    <!-- ajax 방식으로 할 경우 action을 안넣어도됨-->
+    <form class="form1" action="" method="post" enctype="multipart/form-data">
+      <input type="file" name="photo" />
+      <input type="button" value="확인" class="upload_btn" />
+    </form>
+
+    <div class="dis"></div>
+
+    <script>
+      const upload_btn = document.querySelector('.upload_btn');
+      upload_btn.addEventListener('click', () => {
+        const form = document.querySelector('.form1');
+
+        /* formData 라는 객체가 있는데 인스턴스를 해줘야함 */
+        const formData = new FormData(form);
+
+        //통신
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '79.2파일업로드ajax_post받음.php', true);
+        xhr.send(formData);
+        xhr.onload = () => {
+          console.log(xhr.status);
+          /* 통신이 성공했을때 */
+          if (xhr.status == 200) {
+            /* 79.2파일업로드ajax_post에서 받은 부분을 처리  */
+            const data = JSON.parse(xhr.responseText);
+            if (data.result == 'success') {
+              const dis = document.querySelector('.dis');
+              dis.innerHTML = '<img src="' + data.img + '">';
+            }
+          } else {
+            /* 통신이 실패했을때 */
+          }
+        };
+
+        /* 200이면 정상 출력  404면 오류 */
+      });
+    </script>
+  </body>
+</html>

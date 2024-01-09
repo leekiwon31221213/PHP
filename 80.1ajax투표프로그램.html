@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=`, initial-scale=1.0" />
+    <title>AJAX 투표프로그램</title>
+  </head>
+  <body>
+    <div class="poll">
+      <h2>지금 나는 힘든 상태인가요?</h2>
+      <form action="">
+        YES : <input type="radio" name="vote" value="0" onclick="getVote(this.value)" /> <br />
+        No : <input type="radio" name="vote" value="1" onclick="getVote(this.value)" />
+      </form>
+    </div>
+
+    <script>
+      function getVote(int) {
+        /* 인스턴스 생성 */
+        const xhr = new XMLHttpRequest();
+        /* 인스턴스 열고 */
+        xhr.open('GET', '80.2ajax투표프로그램.php?vote=' + int, true);
+        /* 전송 */
+        xhr.send();
+
+        /* 전송한걸 받음 */
+        xhr.onload = function () {
+          console.log(this.status);
+          if (this.status == 200) {
+            document.querySelector('.poll').innerHTML = this.responseText;
+          } else {
+          }
+        };
+      }
+
+      /* () => 로 할경우 변수를 사용해야함 
+      function() 으로 사용할 경우 변수가 아닌 this로 사용해도 상관없음
+      */
+    </script>
+  </body>
+</html>
