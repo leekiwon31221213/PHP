@@ -20,6 +20,7 @@
     <h2>아이디 중복체크 테이블 세팅 값 (sqlyog 사용)</h2>
     <ol>
         <li>
+            <!-- 로그인 테이블 -->
             CREATE TABLE MEMBER(
             <br>idx INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
             <br>user_id VARCHAR(50) DEFAULT '' ,
@@ -30,6 +31,10 @@
         </li>
         <li>INSERT INTO `member` (user_id, rdate) VALUES
             ('kiwon',NOW());</li>
+
+
+        INSERT INTO member VALUES(NULL, '82login_ok', '1234', NOW());
+
 
         <li>SELECT *FROM `member`; 테이블에 데이터 들어갔는지 확인</li>
     </ol>
