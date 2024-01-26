@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시판 만들기 세팅과 호스트 변조</title>
+  </head>
+
+  <body>
+    <ol>
+      세팅과 호스트 변조
+      <li>프로젝트 폴더 생성</li>
+      <li>웹서버 세팅 (버추얼 호스트 설정)</li>
+      <li>웹서버 재시작 (apache restart)</li>
+      <li>호스트 변조 (내 컴퓨터의 hosts 파일 수정)</li>
+    </ol>
+
+    <ol>
+      <li>메모장 관리자 권한으로 실행</li>
+      <li>메모장이 열렸으면 > 열기 > xampp/apache/conf/extra > 모든파일로열기 >httpd-vhosts.conf 열기</li>
+      <li>#NameVirtualHost에서 #주석을 지우고 -> NameVirtualHost *:80</li>
+      <li>
+        ##<VirtualHost *:80>
+          ##ServerAdmin webmaster@dummy-host2.example.com ##DocumentRoot "C:/xampp/htdocs/dummy-host2.example.com"
+          ##ServerName dummy-host2.example.com ##ErrorLog "logs/dummy-host2.example.com-error.log" ##CustomLog
+          "logs/dummy-host2.example.com-access.log" common ##</VirtualHost
+        >
+        해당 부분 하나 카피 붙여 넣고 카피 내용 주석 제거
+      </li>
+
+      <li>
+        카피한거 주석 제거한 후 ServerAdmin webmaster@dummy-host.example.com <br />
+        ErrorLog "logs/dummy-host.example.com-error.log" <br />
+        CustomLog "logs/dummy-host.example.com-access.log" 지워주기
+      </li>
+
+      <li>DocumentRoot 에서 dummy-host.example.com지우고 생성한 폴더 및 파일 넣어주기</li>
+      <li>ServerName dummy-host.example.com -> 사용할 도메인</li>
+    </ol>
+
+    <h2>호스트 변조 (중요)</h2>
+    <ol>
+      <li>
+        위 작업이 다 끝났다면 메모장 관리자 > 열기 > c드라이브/Window/System32/drivers/etc >모든파일로 열기> hosts열기
+      </li>
+      <li>
+        파일이 열면 # localhost name resolution is handled within DNS itself. 밑에 적당히 칸 띄워주고 <br />
+        127.0.0.1 mboard.co.kr <br />
+        127.0.0.1 www.mboard.co.kr
+      </li>
+    </ol>
+  </body>
+</html>

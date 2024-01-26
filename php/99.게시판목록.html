@@ -1,0 +1,65 @@
+<?php
+include './92.게시판DB연결.php';
+$sql = " SELECT * FROM m_board";
+$stmt = $conn->prepare($sql); $stmt->setFetchMode(PDO::FETCH_ASSOC); $stmt->execute(); $rs = $stmt->fetchAll();
+//print_r($rs); //$rs값이 정상적으로 웹에 나타났다면 밑에 서 rs값을 출려력해야함 ?>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>글목록</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div class="container mt-3">
+      <h1 class="h1">자유게시판</h1>
+    </div>
+    <div class="container mt-3">
+      <table class="table table-bordered table-hover">
+        <!-- 테이블 칸 크기 -->
+        <colgroup>
+          <col width="7%" />
+          <col width="63%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+        </colgroup>
+        <!-- 테이블 헤드 -->
+        <thead class="table-primary text-center">
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>등록일</th>
+            <th>조회수</th>
+          </tr>
+        </thead>
+        <!-- $rs값 출력 하는 자리 -->
+        <?php 
+        foreach($rs AS $row){
+        ?>
+
+        <!-- 본문 -->
+        <tr>
+          <td><?= $row['idx']; ?></td>
+          <td><?= $row['title']; ?></td>
+          <td><?= $row['name']; ?></td>
+          <td><?= $row['rdate']; ?></td>
+          <td><?= $row['hit']; ?></td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+  </body>
+</html>
