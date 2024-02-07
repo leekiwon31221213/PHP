@@ -1,18 +1,13 @@
 <?php
-include './92.게시판DB연결.php'; 
-include './100.~페이지네이션함수.php';
+/* list.html  */
+include './92.게시판DB연결.php';  //dbconfig.php
+include './100.~페이지네이션함수.php'; //lib.php
 
 /* 101강 다중게시판 추가 */
-$code = (isset($_GET['code'])&& $_GET['code'] !='')? $_GET['code']:'';
-
-switch($code) {
-  case 'freeboard' : $board_title = '자유게시판'; break; 
-  case 'notice' : $board_title ='공지사항'; break; 
-  default : $code = 'free'; $board_title ='기본게시판'; 
-}
+include './100.~다중게시판.php'; //config
 
 
-/* 100강 목록페이지네이션 */
+/* 100강 목록 페이지네이션 */
 
 //게시물 뿌려줄 갯수 
 $limit = 5;
@@ -52,7 +47,7 @@ $rs = $stmt -> fetchAll();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>글목록</title>
+    <title><?= $board_title; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
 
@@ -91,26 +86,48 @@ $rs = $stmt -> fetchAll();
         ?>
 
             <!-- 본문 -->
-            <tr>
+            <tr class='view_detail' data-idx="<?= $row['idx'];?>" data-code="<?= $code ?>">
                 <td class="text-center"><?= $row['idx']; ?></td>
                 <td><?= $row['title']; ?></td>
-                <td class="text-center"><?= $row['name']; ?></td>
+                <td class=" text-center"><?= $row['name']; ?></td>
                 <td class="text-center"><?= substr($row['rdate'],0,10,); ?></td>
                 <td class="text-center"><?= $row['hit']; ?></td>
             </tr>
             <?php } ?>
         </table>
-        <?php 
-        //다중게시판을 $param으로 변수에 담아서 호출 
-        //include './100.~페이지네이션함수.php'; 파일에도 $param을 추가해줘야함 
-        //파라미터, page= 뒤 확인
+        <div class='mt-3 d-flex justify-content-between align-items-start'>
+            <?php 
+            //다중게시판을 $param으로 변수에 담아서 호출 
+            //include './100.~페이지네이션함수.php'; 파일에도 $param을 추가해줘야함 
+            //파라미터, page= 뒤 확인
+    
+            $param = '&code='. $code;
+                $rs_str = pagination($content_total, $limit, $page_limit, $page, $param);
+                
+                echo $rs_str;
+            ?>
 
-        $param = '&code='.$code;
-            $rs_str = pagination($content_total, $limit, $page_limit, $page, $param);
-            
-            echo $rs_str;
-        ?>
+
+            <button class="btn btn-primary write-btn">글쓰기</button>
+        </div>
     </div>
+
+    <script>
+    const write_btn = document.querySelector('.write-btn');
+    write_btn.addEventListener('click', () => {
+        self.location.href = './96.1글쓰기ajax전송.html?code=<?= $code;?>';
+    });
+
+    const view_detail = document.querySelectorAll('.view_detail');
+    view_detail.forEach((box) => {
+        box.addEventListener('click', () => {
+            self.location.href = './102,103.목록글보기.php?idx=' + box.dataset.idx + '&code=' + box.dataset
+                .code;
+        })
+    })
+    //(box) 각각 tr td영역
+    //&앰퍼센드로 연결해줘야함
+    </script>
 </body>
 
 </html>

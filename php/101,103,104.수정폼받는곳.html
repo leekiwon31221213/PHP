@@ -1,12 +1,58 @@
-<?php 
+<!-- 강의 edit.html -->
 
-/*  게시판을 여러게 사용하면 좋기에 만드는 구문 
-예) 자유게시판,공지사항,제휴 게시판 등 */
+<!-- 104.수정삭제판별로직에서 비밀번호가 맞으면 세션을 생성을 시켜 
+edit_idx에 $idx(게시글 번호)를 담아 해당 게시글만 수정이 가능하도록 
+결론: 엉뚱한 게시글을 수정 못하게 체크가 필요함
+
+else if($mode == 'edit'){
+        session_start();
+        $_SESSION['edit_idx'] = $idx; //edit_idx에 idx를 넣어 이 게시글은 수정이 가능하다는걸 세션에 담아 비교 
+        $arr =['result' => 'edit_success'];
+-->
+
+<!-- 글수정폼에서  아래 코드들 확인 할 것 
+    value="<?= $row['title'] ?>" 
+    value="<?= $row['name'] ?>"
 
 
-/* $_POST['code'] 값이 없을 경우를 생각해 디폴트 값을 지정해줘야함 */
+    썸머노트에서
+    get & set Code 부분에서 아래 코드 카피
 
+    var markupStr = 'hello world';
+    $('#summernote').summernote('code', markupStr);
+
+--> 
+
+<?php
+session_start();
+/* $edit_idx 셋팅이 되어 있는지 체크 */
+$edit_idx =(isset($_SESSION['edit_idx']) && $_SESSION['edit_idx'] != '' && is_numeric($_SESSION['edit_idx'])) ? $_SESSION['edit_idx'] : '' ;
+
+
+/* $idx 셋팅이 되어 있는지 체크 */
+$idx = (isset($_GET['idx']) && $_GET['idx'] != '' && is_numeric($_GET['idx'])) ? $_GET['idx'] : '';
+
+/* $idx 값은 비어있으면 안됨(중요) */
+if($idx == ''){
+    die("<script>alert('게시물 번호가 없습니다.'); history.go(-1); </script>");
+}
+
+
+if($edit_idx != $idx){
+    die("<script>alert('수정권한이 없는 게시물입니다.'); history.go(-1); </script>");
+}
+
+require './92.게시판DB연결.php';  //dbconfig.php
 include './100.~다중게시판.php'; //config
+
+$sql = 'SELECT * FROM m_board WHERE idx=:idx';
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':idx', $idx);
+$stmt->setFetchMode(PDO::FETCH_ASSOC);
+$stmt->execute();
+$row = $stmt->fetch();
+
+//print_r($row);
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +60,7 @@ include './100.~다중게시판.php'; //config
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?=$board_title ?>써머노트 세팅 이후 글쓰기폼코딩</title>
+    <title><?= $board_title ?> 글수정</title>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -26,15 +72,15 @@ include './100.~다중게시판.php'; //config
   </head>
   <body>
     <div class="container">
-      <h2>써머노트 세팅 이후 글쓰기폼코딩</h2>
+      <h2>글 수정</h2>
 
       <br />
       <br />
-      <h1 class="mb-5"><?=$board_title ?></h1>
+     
 
       <!-- 제목 -->
       <div>
-        <input type="text" name="title" placeholder="제목" class="form-control mb-2 w-25 title-input" />
+        <input type="text" name="title" value="<?= $row['title'] ?>" placeholder="제목" class="form-control mb-2 w-25 title-input" />
       </div>
       <!-- 본문 -->
       <div id="summernote"></div>
@@ -43,7 +89,7 @@ include './100.~다중게시판.php'; //config
         <!-- 작성자 -->
         <label for="name" class="d-flex"
           >작성자
-          <input type="text" name="name" placeholder="작성자" id="name" class="form-control w-25 mb-3 name-input" />
+          <input type="text" name="name" value="<?= $row['name'] ?>" placeholder="작성자" id="name" class="form-control w-25 mb-3 name-input" />
         </label>
 
         <!-- 패스워드 -->
@@ -68,6 +114,21 @@ include './100.~다중게시판.php'; //config
       </p>
     </div>
 
+    <!-- 105강 -->
+    <!-- 수정을 하기 위해서는 idx 값이 필요함  두가지 방법으로 글 수정을 할 수 있음
+    console.log(LinkCode);찍어보고 -> ['idx', '33', 'code', 'freeboard']-->
+
+    <!-- 첫번째 방법 form태그 -->
+    <!-- 주의할점 써머노트는 폼을 사용해서 보내는게 아니기 때문에 아래 스크립트에서 idx를 append해줘야함 
+      form1.append('idx',param['idx']);
+    -->
+    <form action="">
+        <input type="hidden" idx="<?= $idx ?>">
+    </form>
+
+    <!-- 두번째 방법 -->
+    
+
     <script>
       const SubMitBtn = document.querySelector('.btn-submit');
       SubMitBtn.addEventListener('click', function (e) {
@@ -84,11 +145,16 @@ include './100.~다중게시판.php'; //config
           alert('작성자 입력해 주세요');
           NameInput.focus();
           return false;
-        } else if (PassWordInput.value == '') {
+        } 
+        
+        /* 글 수정부분에서는 비밀번호를 체크할 필요가 없음
+          else if (PassWordInput.value == '') {
           alert('비밀번호를 입력해 주세요');
           PassWordInput.focus();
           return false;
-        }
+        } */
+
+
         //썸머 노트는 썸머노트만의 독특한 접근 방식이 있다
         const markupStr = $('#summernote').summernote('code');
         //써머 노트 에디터 기능중 코드 뷰 본후 텍스트가 어떤식으로 보내지는지 확인을 하고 아래 문법을 작성해야함
@@ -101,7 +167,7 @@ include './100.~다중게시판.php'; //config
         /* form1.append('code', code);에 대한 코드 */
         const LinkCode = window.location.search.replace('?', '').split(/[=?&]/); //.replace('?', '') '?'앞에 A값을 , ''B값으로 바꾸고 .split([=?&])?& 잘라버린다
         //console.log(LinkCode); ?code=notice&b=dddd 로 값이 넘어온다 가정했을떄 변수 LinkCode에 추가적인 핸들링이 가능함
-
+        console.log(LinkCode);
         let param = {};
         //?code=notice&b=dddd 의 형태가
         //.replace('?', '').split(/[=?&]/); 로 인해  ['code', 'notice', 'b', 'dddd'] 형태로 변경되고
@@ -119,11 +185,12 @@ include './100.~다중게시판.php'; //config
         form1.append('title', TitleInput.value);
         form1.append('content', markupStr);
         form1.append('code', code);
+        form1.append('idx',param['idx']);
         /* form1.append('code', '<?= $code ?>'); <<방식도 있고 */
 
         const xhr = new XMLHttpRequest();
 
-        xhr.open('POST', './92.폼받는곳.php', 'true');
+        xhr.open('POST', './101,103,104.수정폼받는곳.php', 'true');
         xhr.send(form1);
         SubMitBtn.disabled = true;
         xhr.onload = () => {
@@ -132,10 +199,10 @@ include './100.~다중게시판.php'; //config
             // alert('글이 성공적으로 등록 되었습니다.');
             const data = JSON.parse(xhr.responseText);
             if (data.result == 'success') {
-              alert('글이 성공적으로 등록 되었습니다.');
+              alert('글이 성공적으로 수정 되었습니다.');
               self.location.href = './99.게시판목록.html?code=' + code;
             } else {
-              alert('글 등록이 실패했습니다.');
+              alert('글 수정이 실패했습니다.');
             }
           } else {
             alert('통신에 실패했습니다');
@@ -163,6 +230,11 @@ include './100.~다중게시판.php'; //config
           //   ['view', ['fullscreen', 'codeview', 'help']],
         ],
       });
+
+      /* 지금 은 이미지 파일이 안들어가서 더블 쿼트가 문제가 없지만
+      이미지 첨부를 했을경우 더블코트가 중복 될 수 있기에 백틱을 사용하는게 좋음 */
+      const markupStr = `<?= $row['content'] ?>`;
+    $('#summernote').summernote('code', markupStr);
     </script>
   </body>
 </html>

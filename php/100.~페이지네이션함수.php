@@ -85,7 +85,7 @@ $rs_str= '<nav>
     for($i = $start_page; $i <= $end_page; $i++){ 
         if($page == $i){ 
             
-            $rs_str.= '<li class="page-item active" aria-current="page"><a class="page-link" href="#">'.$i.$param.'</a></li>';
+            $rs_str.= '<li class="page-item active" aria-current="page"><a class="page-link" href="#">'.$i.'</a></li>';
 }else{
     
     $rs_str .= '<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$i.$param.'">'.$i.'</a></li>';
