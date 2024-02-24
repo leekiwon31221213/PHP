@@ -55,7 +55,7 @@ foreach($matches[1] AS $key => $row){
 
 
 	//확장자 만들기
-	list(, $data)= explode('/',$type);
+	list(, $ext)= explode('/',$type);
 
 	// $ext :png
 	$ext = ($ext =='jpeg') ? 'jpg' : $ext;
@@ -65,7 +65,7 @@ foreach($matches[1] AS $key => $row){
 
 	file_put_contents('img_upload/'.$filename,$data);
 
-	$content = str_replace($row, 'img_upload'.$filename, $content);
+	$content = str_replace($row, 'img_upload/'.$filename, $content);
 
 	$img_arry[] = 'img_upload'. $filename;
 }

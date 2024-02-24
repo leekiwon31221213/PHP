@@ -1,27 +1,3 @@
-<!-- 강의 edit.html -->
-
-<!-- process에서 비밀번호가 맞으면 세션을 생성을 시켜 
-edit_idx에 $idx(게시글 번호)를 담아 해당 게시글만 수정이 가능하도록 
-결론: 엉뚱한 게시글을 수정 못하게 체크가 필요함
-
-else if($mode == 'edit'){
-        session_start();
-        $_SESSION['edit_idx'] = $idx; //edit_idx에 idx를 넣어 이 게시글은 수정이 가능하다는걸 세션에 담아 비교 
-        $arr =['result' => 'edit_success'];
--->
-
-<!-- 글수정폼에서  아래 코드들 확인 할 것 
-    value="<?= $row['title'] ?>" 
-    value="<?= $row['NAME'] ?>"
-
-
-    썸머노트에서
-    get & set Code 부분에서 아래 코드 카피
-
-    var markupStr = 'hello world';
-    $('#summernote').summernote('code', markupStr);
-
--->
 
 <?php
 session_start();
@@ -54,10 +30,38 @@ $row = $stmt->fetch();
 
 //print_r($row);
 
+
+
 ?>
 
+<!-- 강의 edit.html -->
+
+<!-- process에서 비밀번호가 맞으면 세션을 생성을 시켜 
+edit_idx에 $idx(게시글 번호)를 담아 해당 게시글만 수정이 가능하도록 
+결론: 엉뚱한 게시글을 수정 못하게 체크가 필요함
+
+else if($mode == 'edit'){
+        session_start();
+        $_SESSION['edit_idx'] = $idx; //edit_idx에 idx를 넣어 이 게시글은 수정이 가능하다는걸 세션에 담아 비교 
+        $arr =['result' => 'edit_success'];
+-->
+
+<!-- 글수정폼에서  아래 코드들 확인 할 것 
+    value="<?= $row['title'] ?>" 
+    value="<?= $row['NAME'] ?>"
+
+
+    썸머노트에서
+    get & set Code 부분에서 아래 코드 카피
+
+    var markupStr = 'hello world';
+    $('#summernote').summernote('code', markupStr);
+
+-->
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8" />
@@ -78,7 +82,6 @@ $row = $stmt->fetch();
 
         <br />
         <br />
-
 
         <!-- 제목 -->
         <div>
@@ -126,23 +129,33 @@ $row = $stmt->fetch();
     <!-- 106강 -->
     <script>
     /* form1.append('code', code);에 대한 코드 */
-    const LinkCode = window.location.search.replace('?', '').split(
-        /[=?&]/); //.replace('?', '') '?'앞에 A값을 , ''B값으로 바꾸고 .split([=?&])?& 잘라버린다
+    // const LinkCode = window.location.search.replace('?', '').split(
+    //     /[=?&]/); //.replace('?', '') '?'앞에 A값을 , ''B값으로 바꾸고 .split([=?&])?& 잘라버린다
     //console.log(LinkCode); ?code=notice&b=dddd 로 값이 넘어온다 가정했을떄 변수 LinkCode에 추가적인 핸들링이 가능함
-    console.log(LinkCode);
-    let param = {};
+    // console.log(LinkCode);
+    // let param = {};
     //?code=notice&b=dddd 의 형태가
     //.replace('?', '').split(/[=?&]/); 로 인해  ['code', 'notice', 'b', 'dddd'] 형태로 변경되고
 
-    for (let i = 0; i < LinkCode.length; i++) {
+   /*  for (let i = 0; i < LinkCode.length; i++) {
         param[LinkCode[i]] = LinkCode[++i]; //param[LinkCode[0]] -> param[LinkCode[code]]
     }
-    const code = param['CODE'];
+    const code = param['code'];
 
     const btn_list = document.querySelector('.btn-list');
     btn_list.addEventListener('click', function() {
         self.location.href = './list.html?code=' + code;
+    }); */
+
+    searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get("code");
+    // console.log(code);  
+    const btn_list = document.querySelector('.btn-list');
+    btn_list.addEventListener('click', function() {
+        self.location.href = './list.html?code=' + code;
     });
+
+    //console.log(searchParams.get("idx"));
     </script>
 
 
@@ -191,7 +204,7 @@ $row = $stmt->fetch();
         form1.append('title', TitleInput.value);
         form1.append('content', markupStr);
         form1.append('code', code);
-        form1.append('idx', param['idx']);
+        form1.append('idx', searchParams.get("idx"));
         /* form1.append('code', '<?= $code ?>'); <<방식도 있고 */
 
         const xhr = new XMLHttpRequest();
@@ -206,7 +219,7 @@ $row = $stmt->fetch();
                 const data = JSON.parse(xhr.responseText);
                 if (data.result == 'success') {
                     alert('글이 성공적으로 수정 되었습니다.');
-                    self.location.href = './view.html?code=' + code +'&idx=' + param['idx'];
+                    self.location.href = './view.html?code=' + code +'&idx=' + searchParams.get("idx");
                 }else if(data.result == 'denied'){
                     alert('수정 권한이 없습니다.')
                     self.location.href = './list.html?code=' + code;

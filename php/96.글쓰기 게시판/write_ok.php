@@ -105,7 +105,7 @@ foreach($matches[1] AS $key => $val){
     // $content = str_replace(바꿀대상,변경할이름,본문$content);
     $content = str_replace($val,'./img_upload/'.$filename,$content);
 
-    echo $content;
+    // echo $content;
 }
 
     /* 배열로 저장이 불가능하여 문자열로 변경 */
