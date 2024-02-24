@@ -1,5 +1,5 @@
 <?php
-/*강의 view.html */
+
 include './db.php';  //dbconfig.php
 include './multiple_board_setting.php'; //config
 
@@ -36,7 +36,7 @@ $row = $stmt->fetch();
 
 <head>
 	<meta charset="UTF-8" />
-	<meta NAME="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title><?= $board_title ?></title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
@@ -91,15 +91,15 @@ $row = $stmt->fetch();
 	<div class="modal" tabindex="-1">
 		<div class="modal-dialog">
 			<!-- 강의 액션 process.php -->
-			<form action="./process.php" method="POST" NAME="modal_form" class="modal_form">
-				<input type="hidden" NAME="mode" /><!-- 수정인지 삭제인지 구분하는 구분키가 됨 -->
+			<form action="./process.php" method="POST" name="modal_form" class="modal_form">
+				<input type="hidden" name="mode" /><!-- 수정인지 삭제인지 구분하는 구분키가 됨 -->
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">수정</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<input type="password" NAME="modal_pw" class="modal_pw" placeholder="비밀번호 입력해주세요" />
+						<input type="password" name="modal_pw" class="modal_pw" placeholder="비밀번호 입력해주세요" />
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>

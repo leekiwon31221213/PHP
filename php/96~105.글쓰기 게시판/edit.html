@@ -128,24 +128,6 @@ else if($mode == 'edit'){
 
     <!-- 106강 -->
     <script>
-    /* form1.append('code', code);에 대한 코드 */
-    // const LinkCode = window.location.search.replace('?', '').split(
-    //     /[=?&]/); //.replace('?', '') '?'앞에 A값을 , ''B값으로 바꾸고 .split([=?&])?& 잘라버린다
-    //console.log(LinkCode); ?code=notice&b=dddd 로 값이 넘어온다 가정했을떄 변수 LinkCode에 추가적인 핸들링이 가능함
-    // console.log(LinkCode);
-    // let param = {};
-    //?code=notice&b=dddd 의 형태가
-    //.replace('?', '').split(/[=?&]/); 로 인해  ['code', 'notice', 'b', 'dddd'] 형태로 변경되고
-
-   /*  for (let i = 0; i < LinkCode.length; i++) {
-        param[LinkCode[i]] = LinkCode[++i]; //param[LinkCode[0]] -> param[LinkCode[code]]
-    }
-    const code = param['code'];
-
-    const btn_list = document.querySelector('.btn-list');
-    btn_list.addEventListener('click', function() {
-        self.location.href = './list.html?code=' + code;
-    }); */
 
     searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get("code");

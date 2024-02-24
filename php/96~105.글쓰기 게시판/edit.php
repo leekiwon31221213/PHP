@@ -6,16 +6,18 @@ $edit_idx =(isset($_SESSION['edit_idx']) && $_SESSION['edit_idx'] != '' && is_nu
 include './db.php';
 
 
-$idx = (isset($_POST['idx']) && $_POST['idx'] != '' && is_numeric($_POST['idx'])) ? $_POST['idx']:'';
+
+$idx = (isset  ($_POST['idx']) && $_POST['idx'] != '' && is_numeric($_POST['idx'])) ? $_POST['idx']:'';
+$name = (isset($_POST['name']) && $_POST['name'] != '') ? $_POST['name']:'';
 $title = (isset($_POST['title']) && $_POST['title'] != '') ? $_POST['title']:'';
 $content = (isset($_POST['content']) && $_POST['content'] != '') ? $_POST['content']:'';
-$name = (isset($_POST['NAME']) && $_POST['NAME'] != '') ? $_POST['NAME']:'';
 $pw = (isset($_POST['pw']) && $_POST['pw'] != '') ? $_POST['pw']:'';
 
 if($idx == ''){
 	$arr = ['result' => 'empty_idx'];
 	die(json_encode($arr));
 }
+
 
 if($edit_idx != $idx){
 	$arr = ['result' => 'denied'];
@@ -76,9 +78,9 @@ $imglist = implode('|', $img_arry); //['a','b','c']
 
 /* 비밀번호가 비어 있지 않으면 */
 if($pwd_hash != ''){
-	$sql = "UPDATE m_board SET NAME=:name, title=:title, content=:content, imgList=:imgList, pw=:pw WHERE idx=:idx";
+	$sql = "UPDATE m_board SET name=:name, title=:title, content=:content, imgList=:imgList, pw=:pw WHERE idx=:idx";
 }else{
-	$sql = "UPDATE m_board SET NAME=:name, title=:title, content=:content, imgList=:imgList WHERE idx=:idx";
+	$sql = "UPDATE m_board SET name=:name, title=:title, content=:content, imgList=:imgList WHERE idx=:idx";
 }
 
 $stmt = $conn->prepare($sql);
